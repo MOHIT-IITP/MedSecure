@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedSecure | Secure Medical Data Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+    <!-- Sticky Navigation -->
+    <nav id="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <i class="fa-solid fa-shield-heart"></i> MedSecure
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#demo">Interactive Demo</a></li>
+            </ul>
+            <a href="#demo" class="btn btn-primary">Try Dashboard</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero" id="home">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1>Your Health Data,<br><span>Secured in a Scan</span></h1>
+                <p>MedSecure bridges the gap between patients and providers. Convert your complete medical history into a highly secure, offline-accessible JSON payload via QR code.</p>
+                <div class="hero-buttons">
+                    <a href="#demo" class="btn btn-primary">Create Your Medical ID</a>
+                    <a href="#how-it-works" class="btn btn-outline">See How It Works</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="mockup-card">
+                    <i class="fa-solid fa-file-medical fa-4x" style="color: var(--primary); margin-bottom: 1rem;"></i>
+                    <h3 style="margin-bottom: 0.5rem;">Verified Medical Record</h3>
+                    <p style="color: var(--text-light);">Status: <span style="color: #10b981; font-weight: 600;"><i class="fa-solid fa-check-circle"></i> Protected</span></p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose MedSecure?</h2>
+            <div class="grid-3">
+                <div class="feature-card">
+                    <i class="fa-solid fa-file-code"></i>
+                    <h3>JSON Encoded</h3>
+                    <p>We pack your structured personal and medical data directly into the QR pattern for immediate offline parsing.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-bolt"></i>
+                    <h3>Instant Emergency Access</h3>
+                    <p>First responders scan your code to instantly read critical data like allergies and blood group without internet.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-lock"></i>
+                    <h3>Privacy First</h3>
+                    <p>Your generated QR code remains local to your device until you decide to share it with a trusted medical provider.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How the Platform Works</h2>
+            <div class="grid-3">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Input Details</h3>
+                    <p>Fill out the comprehensive medical and personal detail form in your dashboard.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Generate Payload</h3>
+                    <p>Our system compiles your data into a structured JSON string and encodes it.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Scan & Parse</h3>
+                    <p>Healthcare software scans the QR code and instantly populates your patient chart.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Feature: Demo Dashboard -->
+    <section class="demo" id="demo">
+        <div class="container">
+            <h2 class="section-title">Interactive Data Dashboard</h2>
+            <div class="dashboard-wrapper">
+                
+                <!-- Left Side: Form Area -->
+                <div class="dashboard-form-area">
+                    <form id="medicalForm">
+                        
+                        <!-- Personal Details -->
+                        <h3 class="form-section-title"><i class="fa-solid fa-user"></i> Personal Details</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" id="fullName" class="form-control" placeholder="e.g. John Doe" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="age">Age</label>
+                                <input type="number" id="age" class="form-control" placeholder="e.g. 34" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select id="gender" class="form-control" required>
+                                    <option value="" disabled selected>Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                    <option value="Prefer not to say">Prefer not to say</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="bloodGroup">Blood Group</label>
+                                <select id="bloodGroup" class="form-control" required>
+                                    <option value="" disabled selected>Select Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactInfo">Emergency Contact</label>
+                                <input type="tel" id="contactInfo" class="form-control" placeholder="+1 (555) 000-0000" required>
+                            </div>
+                        </div>
+                        <div class="form-grid full">
+                            <div class="form-group">
+                                <label for="address">Home Address</label>
+                                <textarea id="address" class="form-control" placeholder="Full residential address..." required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Medical Details -->
+                        <h3 class="form-section-title" style="margin-top: 2rem;"><i class="fa-solid fa-notes-medical"></i> Medical Details</h3>
+                        <div class="form-grid full">
+                            <div class="form-group">
+                                <label for="allergies">Known Allergies</label>
+                                <input type="text" id="allergies" class="form-control" placeholder="e.g. Penicillin, Peanuts (or 'None')">
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="presentCondition">Present Condition / Chief Complaint</label>
+                                <textarea id="presentCondition" class="form-control" placeholder="Describe current health issues..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="currentMedication">Current Medications</label>
+                                <textarea id="currentMedication" class="form-control" placeholder="List medications and dosages..."></textarea>
+                            </div>
+                        </div>
+                        <div class="form-grid full">
+                            <div class="form-group">
+                                <label for="history">Medical History</label>
+                                <textarea id="history" class="form-control" placeholder="Past surgeries, chronic illnesses, etc."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="additionalNotes">Additional Notes</label>
+                                <textarea id="additionalNotes" class="form-control" placeholder="Any other relevant instructions for physicians..."></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 16px;">
+                            <i class="fa-solid fa-qrcode"></i> Generate Encrypted Medical ID
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Right Side: QR Display Area -->
+                <div class="dashboard-qr-area">
+                    <h3>Your Medical ID</h3>
+                    <p class="qr-instructions">Fill the form and generate to encode your JSON payload.</p>
+                    
+                    <div class="qr-display">
+                        <!-- Default placeholder before generation -->
+                        <div id="qrcode" style="min-width: 200px; min-height: 200px; display: flex; align-items: center; justify-content: center; color: var(--border-color);">
+                            <i class="fa-solid fa-qrcode fa-5x"></i>
+                        </div>
+                    </div>
+                    
+                    <button id="downloadBtn" class="btn btn-outline" onclick="downloadQR()" disabled style="opacity: 0.5; cursor: not-allowed;">
+                        <i class="fa-solid fa-download"></i> Download QR Code
+                    </button>
+
+                    <div id="successMsg" style="color: #10b981; font-size: 0.85rem; font-weight: 600; margin-top: 15px; opacity: 0; transition: opacity 0.3s;">
+                        <i class="fa-solid fa-check"></i> Data successfully encoded!
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-container">
+            <div>
+                <h4 style="display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-shield-heart"></i> MedSecure</h4>
+                <p>Empowering patients and providers through secure, offline-first data transmission and JSON-encoded identities.</p>
+            </div>
+            <div>
+                <h4>Legal & Privacy</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">HIPAA Compliance details</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Get in Touch</h4>
+                <p>support@medsecure.demo</p>
+                <p>1-800-MED-SAFE</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2026 MedSecure. All rights reserved. Built for demonstration purposes.</p>
+        </div>
+    </footer>
+<script src="assets/main.js"></script>
+</body>
+</html>
