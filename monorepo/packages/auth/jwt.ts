@@ -1,9 +1,16 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import path from "path";
 
-const JWT_SECRET = 
+dotenv.config({
+  path: path.resolve(
+    __dirname,
+    "../../.env"
+  ),
+});
+
+const JWT_SECRET =
   process.env.JWT_SECRET!;
-
-
 
 export function generateJWT(
   payload: {
@@ -23,13 +30,17 @@ export function generateJWT(
 
 export function verifyJWT(
   token: string
-){
+) {
+
   try {
+
     return jwt.verify(
       token,
       JWT_SECRET
     );
-  } catch (error) {
+
+  } catch {
+
     return null;
   }
 }
