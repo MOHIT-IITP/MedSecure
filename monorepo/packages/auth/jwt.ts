@@ -1,46 +1,28 @@
+import path from "path";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import path from "path";
 
-dotenv.config({
-  path: path.resolve(
-    __dirname,
-    "../../.env"
-  ),
-});
+dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
 
-const JWT_SECRET =
-  process.env.JWT_SECRET!;
+type JWTPayload = {
+  id: string;
+  email: string;
+};
 
-export function generateJWT(
-  payload: {
-    id: string;
-    email: string;
-  }
-) {
+const JWT_SECRET = process.env.JWT_SECRET;
 
-  return jwt.sign(
-    payload,
-    JWT_SECRET,
-    {
-      expiresIn: "7d",
-    }
-  );
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET environment variable is not set");
 }
 
-export function verifyJWT(
-  token: string
-) {
+export function generateJWT(payload: JWTPayload) {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+}
 
+export function verifyJWT(token: string): JWTPayload | null {
   try {
-
-    return jwt.verify(
-      token,
-      JWT_SECRET
-    );
-
+    return jwt.verify(token, JWT_SECRET) as JWTPayload;
   } catch {
-
     return null;
   }
 }

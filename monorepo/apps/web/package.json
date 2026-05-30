@@ -11,6 +11,9 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@repo/auth": "*",
+    "@repo/db": "*",
+    "@repo/validation": "*",
     "@repo/ui": "*",
     "bcryptjs": "^3.0.3",
     "geist": "^1.7.1",
