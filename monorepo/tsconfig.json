@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+
+    "paths": {
+      "@repo/db": ["packages/db/index.ts"],
+      "@repo/auth": ["packages/auth/index.ts"],
+      "@repo/validation": [
+        "packages/validation/index.ts"
+      ]
+    }
+  }
+}

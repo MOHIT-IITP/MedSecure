@@ -1,8 +1,14 @@
 {
-  "name": "auth",
+  "name": "@repo/auth",
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "exports": {
+    ".": {
+      "import": "./index.ts",
+      "require": "./index.ts"
+    }
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },

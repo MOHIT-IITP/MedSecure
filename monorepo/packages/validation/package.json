@@ -1,10 +1,16 @@
 {
-  "name": "validation",
+  "name": "@repo/validation",
   "module": "index.ts",
   "type": "module",
   "private": true,
   "devDependencies": {
     "@types/bun": "latest"
+  },
+  "exports": {
+    ".": {
+      "import": "./index.ts",
+      "require": "./index.ts"
+    }
   },
   "peerDependencies": {
     "typescript": "^5"
