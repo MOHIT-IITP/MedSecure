@@ -1,9 +1,9 @@
-import { signupSchema } from "@repo/validation";
+import { signupSchema } from "../../../../../../packages/validation";
 import { NextResponse } from "next/server";
-import {db} from "@repo/db";
-import {users} from "@repo/db";
-import {hashPassword, generateJWT,} from "@repo/auth";
-import {eq} from "drizzle-orm";
+import { db } from "../../../../../../packages/db";
+import { users } from "../../../../../../packages/db";
+import { hashPassword, generateJWT } from "../../../../../../packages/auth";
+import { eq } from "drizzle-orm";
 
 export async function POST(
   req: Request
