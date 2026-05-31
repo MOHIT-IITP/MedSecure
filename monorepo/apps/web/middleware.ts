@@ -5,13 +5,11 @@ import { NextResponse } from "next/server";
 // route handlers should perform full token verification.
 
 const protectedRoutes = [
-
   "/dashboard",
-
   "/profile",
-
   "/settings",
-
+  "/qr",
+  "/records",
 ];
 
 export function middleware(
@@ -61,6 +59,7 @@ export const config = {
     "/profile/:path*",
 
     "/settings/:path*",
-
+    "/qr/:path*",
+    "/records/:path*",
   ],
 };
