@@ -1,9 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Alert, Button, Card, Input, Label } from "../../components/ui";
+import {
+  AuthAlert,
+  AuthButton,
+  AuthInput,
+  AuthLabel,
+  AuthPageShell,
+} from "../../components/auth-page-shell";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -36,47 +41,43 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-teal-50 to-slate-100 px-4">
-      <Card className="w-full max-w-md">
-        <h1 className="text-xl font-semibold text-slate-900">Welcome back</h1>
-        <p className="mt-1 text-sm text-slate-600">Log in to your MedSecure account.</p>
+    <AuthPageShell
+      title="Welcome back"
+      description="Log in to your MedSecure account."
+      footerText="New here?"
+      footerHref="/signup"
+      footerLinkLabel="Create an account"
+    >
+      <form onSubmit={onSubmit} className="mt-8 space-y-5">
+        <div>
+          <AuthLabel>Email</AuthLabel>
+          <AuthInput
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+            placeholder="you@example.com"
+          />
+        </div>
+        <div>
+          <AuthLabel>Password</AuthLabel>
+          <AuthInput
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            autoComplete="current-password"
+            placeholder="••••••••"
+          />
+        </div>
 
-        <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <div>
-            <Label>Email</Label>
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-            />
-          </div>
-          <div>
-            <Label>Password</Label>
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-            />
-          </div>
+        {error && <AuthAlert>{error}</AuthAlert>}
 
-          {error && <Alert>{error}</Alert>}
-
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Signing in…" : "Log in"}
-          </Button>
-        </form>
-
-        <p className="mt-4 text-center text-sm text-slate-600">
-          New here?{" "}
-          <Link href="/signup" className="font-medium text-teal-700 hover:underline">
-            Create an account
-          </Link>
-        </p>
-      </Card>
-    </div>
+        <AuthButton type="submit" disabled={loading}>
+          {loading ? "Signing in…" : "Log in"}
+        </AuthButton>
+      </form>
+    </AuthPageShell>
   );
 }
