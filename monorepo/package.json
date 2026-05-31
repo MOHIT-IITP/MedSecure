@@ -6,7 +6,9 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "check-types": "turbo run check-types",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "test:backend": "bun run scripts/test-backend.ts",
+    "test:backend:ci": "bun run --filter @repo/db db:push && bun run test:backend"
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",

@@ -1,20 +1,7 @@
-import dotenv from "dotenv";
-import path from "path";
-
+import "./loadEnv";
 import postgres from "postgres";
-
-import { drizzle }
-from "drizzle-orm/postgres-js";
-
-import * as schema
-from "./schema";
-
-dotenv.config({
-  path: path.resolve(
-    process.cwd(),
-    "../../.env"
-  ),
-});
+import { drizzle } from "drizzle-orm/postgres-js";
+import * as schema from "./schema";
 
 const client =
   postgres(
@@ -27,3 +14,4 @@ export const db =
   });
 
 export * from "./schema";
+export * from "./sanitize";

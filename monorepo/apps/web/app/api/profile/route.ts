@@ -12,6 +12,7 @@ import {
 import {
   db,
   users,
+  omitPassword,
 } from "../../../../../packages/db";
 
 import {
@@ -75,11 +76,16 @@ export async function GET() {
           ),
         });
 
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "User not found" },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json({
-
-      success:true,
-
-      user,
+      success: true,
+      user: omitPassword(user),
     });
 
   } catch {
@@ -180,10 +186,8 @@ export async function PATCH(
         .returning();
 
     return NextResponse.json({
-
-      success:true,
-
-      user:updatedUser,
+      success: true,
+      user: omitPassword(updatedUser),
     });
 
   } catch {

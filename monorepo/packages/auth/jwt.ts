@@ -1,8 +1,5 @@
-import path from "path";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-
-dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
+import "../db/loadEnv";
 
 type JWTPayload = {
   id: string;

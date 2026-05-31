@@ -14,8 +14,7 @@ import { verifyJWT } from "../../../../../../packages/auth";
 
 import { db, reports } from "../../../../../../packages/db";
 
-import { supabase }
-from "@/lib/supabase";
+import { supabase } from "../../../../lib/supabase";
 
 export async function POST(
   req: Request
