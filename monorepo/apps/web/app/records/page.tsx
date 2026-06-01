@@ -73,107 +73,135 @@ export default function RecordsPage() {
   return (
     <AppShell title="Daily health logs">
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
-          <h2 className="mb-4 font-medium text-slate-900">Add today&apos;s entry</h2>
+        <Card className="glass-panel-strong border-white/10 bg-white/6 p-6 text-white shadow-none sm:p-8">
+          <h2 className="mb-4 text-xl font-semibold text-white">
+            Add today&apos;s entry
+          </h2>
           <form onSubmit={onSubmit} className="space-y-3">
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <Label>Blood pressure</Label>
+                <Label className="text-white/70">Blood pressure</Label>
                 <Input
                   placeholder="120/80"
                   value={form.bloodPressure}
                   onChange={(e) =>
                     setForm({ ...form, bloodPressure: e.target.value })
                   }
+                  className="border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-teal-300/40 focus:ring-teal-400/20"
                 />
               </div>
               <div>
-                <Label>Sugar level</Label>
+                <Label className="text-white/70">Sugar level</Label>
                 <Input
                   value={form.sugarLevel}
                   onChange={(e) =>
                     setForm({ ...form, sugarLevel: e.target.value })
                   }
+                  className="border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-teal-300/40 focus:ring-teal-400/20"
                 />
               </div>
               <div>
-                <Label>Pulse</Label>
+                <Label className="text-white/70">Pulse</Label>
                 <Input
                   value={form.pulse}
                   onChange={(e) => setForm({ ...form, pulse: e.target.value })}
+                  className="border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-teal-300/40 focus:ring-teal-400/20"
                 />
               </div>
               <div>
-                <Label>Weight</Label>
+                <Label className="text-white/70">Weight</Label>
                 <Input
                   value={form.weight}
                   onChange={(e) => setForm({ ...form, weight: e.target.value })}
+                  className="border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-teal-300/40 focus:ring-teal-400/20"
                 />
               </div>
             </div>
             <div>
-              <Label>Notes</Label>
+              <Label className="text-white/70">Notes</Label>
               <Textarea
                 rows={3}
                 value={form.notes}
                 onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                className="border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-teal-300/40 focus:ring-teal-400/20"
               />
             </div>
             {message && (
-              <Alert tone={message.includes("saved") ? "success" : "error"}>
+              <Alert
+                tone={message.includes("saved") ? "success" : "error"}
+                className={
+                  message.includes("saved")
+                    ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-100"
+                    : "border border-rose-400/20 bg-rose-400/10 text-rose-100"
+                }
+              >
                 {message}
               </Alert>
             )}
-            <Button type="submit" disabled={saving}>
+            <Button
+              type="submit"
+              disabled={saving}
+              className="rounded-xl bg-linear-to-r from-teal-400 to-cyan-500 px-5 py-3 font-semibold text-slate-950 shadow-lg shadow-teal-500/20 hover:from-teal-300 hover:to-cyan-400"
+            >
               {saving ? "Saving…" : "Save log"}
             </Button>
           </form>
         </Card>
 
-        <Card>
-          <h2 className="mb-4 font-medium text-slate-900">Recent logs</h2>
+        <Card className="glass-panel border-white/10 bg-white/6 p-6 text-white shadow-none sm:p-8">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-semibold text-white">Recent logs</h2>
+              <p className="mt-2 text-sm leading-6 text-white/60">
+                The most recent entries are shown here in a translucent glass list.
+              </p>
+            </div>
+            <span className="rounded-full bg-cyan-400/15 px-3 py-1 text-xs font-medium text-cyan-100 ring-1 ring-cyan-300/20">
+              Private
+            </span>
+          </div>
           {loading ? (
-            <p className="text-sm text-slate-600">Loading…</p>
+            <p className="text-sm text-white/70">Loading…</p>
           ) : records.length === 0 ? (
-            <p className="text-sm text-slate-600">No entries yet.</p>
+            <p className="text-sm text-white/60">No entries yet.</p>
           ) : (
-            <ul className="max-h-[28rem] space-y-3 overflow-y-auto">
+            <ul className="mt-5 max-h-112 space-y-3 overflow-y-auto pr-1">
               {records.map((r) => (
                 <li
                   key={r.id}
-                  className="rounded-lg border border-slate-100 bg-slate-50 p-3 text-sm"
+                  className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white"
                 >
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-white/45">
                     {new Date(r.createdAt).toLocaleString()}
                   </p>
                   <dl className="mt-2 grid grid-cols-2 gap-1">
                     {r.bloodPressure && (
                       <>
-                        <dt className="text-slate-500">BP</dt>
-                        <dd>{r.bloodPressure}</dd>
+                        <dt className="text-white/45">BP</dt>
+                        <dd className="text-white/90">{r.bloodPressure}</dd>
                       </>
                     )}
                     {r.sugarLevel && (
                       <>
-                        <dt className="text-slate-500">Sugar</dt>
-                        <dd>{r.sugarLevel}</dd>
+                        <dt className="text-white/45">Sugar</dt>
+                        <dd className="text-white/90">{r.sugarLevel}</dd>
                       </>
                     )}
                     {r.pulse && (
                       <>
-                        <dt className="text-slate-500">Pulse</dt>
-                        <dd>{r.pulse}</dd>
+                        <dt className="text-white/45">Pulse</dt>
+                        <dd className="text-white/90">{r.pulse}</dd>
                       </>
                     )}
                     {r.weight && (
                       <>
-                        <dt className="text-slate-500">Weight</dt>
-                        <dd>{r.weight}</dd>
+                        <dt className="text-white/45">Weight</dt>
+                        <dd className="text-white/90">{r.weight}</dd>
                       </>
                     )}
                   </dl>
                   {r.notes && (
-                    <p className="mt-2 text-slate-700">{r.notes}</p>
+                    <p className="mt-2 text-white/75">{r.notes}</p>
                   )}
                 </li>
               ))}

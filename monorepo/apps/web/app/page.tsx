@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LandingFooter } from "../components/landing-footer";
+import { Card } from "../components/ui";
 
 type FeatureItem = { title: string; desc: string };
 
@@ -119,7 +120,7 @@ export default function HomePage() {
 
             <h1 className="text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
               Your health records,{" "}
-              <span className="bg-gradient-to-r from-teal-200 via-cyan-200 to-indigo-200 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-teal-200 via-cyan-200 to-indigo-200 bg-clip-text text-transparent">
                 one scan away
               </span>
             </h1>
@@ -132,7 +133,7 @@ export default function HomePage() {
             <div className="mt-10 flex flex-wrap justify-center gap-4 lg:justify-start">
               <Link
                 href="/signup"
-                className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-teal-400/90 to-cyan-500/90 px-7 py-3.5 text-sm font-semibold text-slate-900 shadow-lg shadow-teal-500/25 transition hover:shadow-teal-400/40"
+                className="group relative overflow-hidden rounded-2xl bg-linear-to-r from-teal-400/90 to-cyan-500/90 px-7 py-3.5 text-sm font-semibold text-slate-900 shadow-lg shadow-teal-500/25 transition hover:shadow-teal-400/40"
               >
                 <span className="relative z-10">Get started free</span>
                 <span className="absolute inset-0 bg-white/20 opacity-0 transition group-hover:opacity-100" />
@@ -213,44 +214,42 @@ export default function HomePage() {
         </div>
 
         <section className="mt-24" aria-labelledby="features-heading">
-          <div className="text-center lg:text-left">
-            <h2
-              id="features-heading"
-              className="text-2xl font-bold tracking-tight sm:text-3xl"
-            >
-              Everything in one platform
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-white/60 lg:mx-0">
-              From secure sign-in to emergency QR sharing — every feature you need to
-              manage and share health information safely.
-            </p>
-          </div>
-
-          <ul className="mt-10 grid gap-5 sm:grid-cols-2">
-            {featureGroups.map((group) => (
-              <li
-                key={group.category}
-                className={`feature-card feature-card--${group.accent} feature-card--minimal p-6 sm:p-7`}
+          <Card className="mt-8 p-6 sm:p-8 glass-panel">
+            <div className="text-center lg:text-left">
+              <h2
+                id="features-heading"
+                className="text-2xl font-bold tracking-tight sm:text-3xl"
               >
-                <span className={`feature-tag feature-tag--${group.accent}`}>
-                  {group.category}
-                </span>
+                Everything in one platform
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-white/60 lg:mx-0">
+                From secure sign-in to emergency QR sharing — every feature you need to
+                manage and share health information safely.
+              </p>
+            </div>
 
-                <ul className="mt-5 space-y-5">
-                  {group.items.map((item) => (
-                    <li key={item.title} className="border-t border-white/8 pt-5 first:border-0 first:pt-0">
-                      <h3 className="text-base font-medium text-white/95">
-                        {item.title}
-                      </h3>
-                      <p className="mt-1.5 text-sm leading-relaxed text-white/50">
-                        {item.desc}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
+            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+              {featureGroups.map((group) => (
+                <Card
+                  key={`mini-${group.category}`}
+                  className={`p-6 sm:p-8 glass-panel backdrop-blur-2xl feature-card--minimal feature-card--${group.accent} text-white/95 h-full`}
+                >
+                  <span className={`feature-tag feature-tag--${group.accent} px-5 py-3 backdrop-blur-2xl rounded-4xl bg-white/10 uppercase text-sm`}>{group.category}</span>
+
+                  <ul className="mt-4 space-y-3">
+                    {group.items.map((it) => (
+                      <li key={it.title} className="text-left">
+                        <h4 className="text-base font-semibold text-white/95">{it.title}</h4>
+                        <p className="text-sm text-white/60">{it.desc}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              ))}
+            </div>
+
+            {/* Detailed feature list removed — mini tagged cards display each group's features */}
+          </Card>
         </section>
       </main>
 

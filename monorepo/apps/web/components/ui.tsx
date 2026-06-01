@@ -14,9 +14,15 @@ export function Card({
   );
 }
 
-export function Label({ children }: { children: React.ReactNode }) {
+export function Label({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <label className="mb-1 block text-sm font-medium text-slate-700">
+    <label className={`mb-1 block text-sm font-medium text-slate-700 ${className}`}>
       {children}
     </label>
   );
@@ -68,9 +74,11 @@ export function Button({
 export function Alert({
   children,
   tone = "error",
+  className = "",
 }: {
   children: React.ReactNode;
   tone?: "error" | "success";
+  className?: string;
 }) {
   return (
     <p
@@ -78,7 +86,7 @@ export function Alert({
         tone === "success"
           ? "bg-emerald-50 text-emerald-800"
           : "bg-red-50 text-red-800"
-      }`}
+      } ${className}`}
     >
       {children}
     </p>
