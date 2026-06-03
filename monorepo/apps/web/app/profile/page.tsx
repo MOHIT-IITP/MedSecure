@@ -177,7 +177,7 @@ export default function ProfilePage() {
             </Alert>
           )}
           {message && (
-            <Alert tone="success" className="border border-emerald-400/20 bg-emerald-400/10 text-emerald-100">
+            <Alert tone="success" className="border border-emerald-400/20 bg-emerald-400/10 text-white">
               {message}
             </Alert>
           )}

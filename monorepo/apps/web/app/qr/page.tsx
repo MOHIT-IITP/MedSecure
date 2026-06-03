@@ -30,7 +30,7 @@ export default function QRPage() {
 
   return (
     <AppShell title="Your emergency QR code">
-      <p className="-mt-4 mb-6 text-slate-600">
+      <p className="-mt-4 mb-6 text-white">
         Anyone who scans this code opens your public emergency dashboard — no login
         required. Only profile and recent health logs are shared, not your reports.
       </p>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CiHospital1 } from "react-icons/ci";
 
 export function AuthPageShell({
   title,
@@ -33,7 +34,7 @@ export function AuthPageShell({
           className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-white/60 transition hover:text-white"
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-xs font-bold text-teal-200 ring-1 ring-white/20">
-            M
+            <CiHospital1 className="h-4 w-4" />
           </span>
           MedSecure
         </Link>

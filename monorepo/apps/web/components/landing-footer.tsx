@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CiHospital1 } from "react-icons/ci";
 
 const links = {
   product: [
@@ -21,7 +22,7 @@ export function LandingFooter() {
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-400/20 text-sm font-bold text-teal-200 ring-1 ring-teal-300/30">
-                M
+                <CiHospital1 className="h-5 w-5" />
               </span>
               <span className="text-lg font-semibold text-white">MedSecure</span>
             </div>

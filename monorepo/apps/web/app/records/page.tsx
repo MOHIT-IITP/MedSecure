@@ -73,7 +73,7 @@ export default function RecordsPage() {
   return (
     <AppShell title="Daily health logs">
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="glass-panel-strong border-white/10 bg-white/6 p-6 text-white shadow-none sm:p-8">
+        <Card className="glass-panel-strong border-white/10 bg-white/6 p-6 backdrop-blur-2xl text-white shadow-none sm:p-8">
           <h2 className="mb-4 text-xl font-semibold text-white">
             Add today&apos;s entry
           </h2>
@@ -131,7 +131,7 @@ export default function RecordsPage() {
                 tone={message.includes("saved") ? "success" : "error"}
                 className={
                   message.includes("saved")
-                    ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-100"
+                      ? "border border-emerald-400/20 bg-emerald-400/10 text-white"
                     : "border border-rose-400/20 bg-rose-400/10 text-rose-100"
                 }
               >
@@ -148,7 +148,7 @@ export default function RecordsPage() {
           </form>
         </Card>
 
-        <Card className="glass-panel border-white/10 bg-white/6 p-6 text-white shadow-none sm:p-8">
+        <Card className="glass-panel backdrop-blur-2xl border-white/10 bg-white/6 p-6 text-white shadow-none sm:p-8">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold text-white">Recent logs</h2>
