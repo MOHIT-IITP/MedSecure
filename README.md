@@ -1,7 +1,12 @@
 # MedSecure
 
 MedSecure is a QR-based digital health record platform. Users manage medical reports and daily vitals in a private web app, then share emergency information through a tokenized QR code — no login required for viewers.
-
+<img src="./medsecure_pics/user_dashboard.png" height=500px width=800px>
+<img src="./medsecure_pics/daily_log.png" height=500px width=800px>
+<img src="./medsecure_pics/emergency_dashboard.png" height=500px width=800px>
+<img src="./medsecure_pics/medical_report_upload.png" height=500px width=800px>
+<img src="./medsecure_pics/profile.png" height=500px width=800px>
+<img src="./medsecure_pics/qr code.png" height=500px width=800px>
 ## Features
 
 | Area | What you get |
