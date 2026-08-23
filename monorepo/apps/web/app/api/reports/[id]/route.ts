@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { and, eq } from "drizzle-orm";
 import { verifyJWT } from "../../../../../../packages/auth";
 import { db, reports } from "../../../../../../packages/db";
-import { supabase } from "../../../../lib/supabase";
+import { getSupabase } from "../../../../lib/supabase";
 
 type RouteContext = {
   params: Promise<{ id: string }>;
@@ -38,7 +38,7 @@ export async function GET(_req: Request, context: RouteContext) {
       );
     }
 
-    const { data, error } = await supabase.storage
+    const { data, error } = await getSupabase().storage
       .from("medical-reports")
       .createSignedUrl(report.fileUrl, 60 * 10);
 
@@ -94,7 +94,7 @@ export async function DELETE(_req: Request, context: RouteContext) {
       );
     }
 
-    await supabase.storage.from("medical-reports").remove([report.fileUrl]);
+    await getSupabase().storage.from("medical-reports").remove([report.fileUrl]);
 
     await db.delete(reports).where(eq(reports.id, id));
 

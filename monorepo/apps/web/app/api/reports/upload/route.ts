@@ -14,7 +14,7 @@ import { verifyJWT } from "../../../../../../packages/auth";
 
 import { db, reports } from "../../../../../../packages/db";
 
-import { supabase } from "../../../../lib/supabase";
+import { getSupabase } from "../../../../lib/supabase";
 
 export async function POST(
   req: Request
@@ -98,7 +98,7 @@ export async function POST(
 
     const {
       error,
-    } = await supabase
+    } = await getSupabase()
       .storage
       .from(
         "medical-reports"
