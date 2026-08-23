@@ -249,7 +249,6 @@ export default function HomePage() {
               ))}
             </div>
 
-            {/* Detailed feature list removed — mini tagged cards display each group's features */}
           </Card>
         </section>
       </main>
