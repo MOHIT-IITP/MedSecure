@@ -4,6 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "prebuild": "bun run --filter @repo/ui build:styles",
     "dev": "next dev --port 3000",
     "build": "next build",
     "start": "next start",
