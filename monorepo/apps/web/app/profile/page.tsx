@@ -1,8 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AppShell } from "../../components/app-shell";
-import { Alert, Button, Card, Input, Label, Textarea } from "../../components/ui";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+  Badge,
+  Input,
+  Label,
+  Textarea,
+  Alert,
+} from "../../components/ui";
+import {
+  User,
+  Shield,
+  Phone,
+  AlertCircle,
+  CheckCircle2,
+  Lock,
+  Heart,
+} from "../../components/ui/icons";
 
 type UserProfile = {
   name: string;
@@ -15,6 +37,7 @@ type UserProfile = {
 };
 
 export default function ProfilePage() {
+  const [initialData, setInitialData] = useState<UserProfile | null>(null);
   const [form, setForm] = useState({
     name: "",
     age: "",
@@ -24,173 +47,305 @@ export default function ProfilePage() {
     emergencyContact: "",
   });
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [feedback, setFeedback] = useState<{
+    tone: "success" | "error";
+    message: string;
+  } | null>(null);
 
   useEffect(() => {
-    async function load() {
-      const res = await fetch("/api/profile");
-      const data = await res.json();
-      setLoading(false);
+    async function loadProfile() {
+      try {
+        const res = await fetch("/api/profile");
+        const data = await res.json();
 
-      if (!res.ok || !data.user) {
-        setError("Could not load profile.");
+        if (res.ok && data.user) {
+          const u = data.user as UserProfile;
+          setInitialData(u);
+          setEmail(u.email ?? "");
+          setForm({
+            name: u.name ?? "",
+            age: u.age != null ? String(u.age) : "",
+            bloodGroup: u.bloodGroup ?? "",
+            allergies: u.allergies ?? "",
+            chronicDiseases: u.chronicDiseases ?? "",
+            emergencyContact: u.emergencyContact ?? "",
+          });
+        } else {
+          setFeedback({
+            tone: "error",
+            message: "Failed to load profile details.",
+          });
+        }
+      } catch (err) {
+        console.error(err);
+        setFeedback({
+          tone: "error",
+          message: "Network error loading profile.",
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProfile();
+  }, []);
+
+  function handleReset() {
+    if (!initialData) return;
+    setForm({
+      name: initialData.name ?? "",
+      age: initialData.age != null ? String(initialData.age) : "",
+      bloodGroup: initialData.bloodGroup ?? "",
+      allergies: initialData.allergies ?? "",
+      chronicDiseases: initialData.chronicDiseases ?? "",
+      emergencyContact: initialData.emergencyContact ?? "",
+    });
+    setFeedback(null);
+  }
+
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setFeedback(null);
+
+    try {
+      const res = await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          age: form.age ? Number(form.age) : undefined,
+          bloodGroup: form.bloodGroup.trim() || undefined,
+          allergies: form.allergies.trim() || undefined,
+          chronicDiseases: form.chronicDiseases.trim() || undefined,
+          emergencyContact: form.emergencyContact.trim() || undefined,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setFeedback({
+          tone: "error",
+          message: data.message ?? "Could not save profile updates.",
+        });
         return;
       }
 
-      const user = data.user as UserProfile;
-      setEmail(user.email);
-      setForm({
-        name: user.name ?? "",
-        age: user.age != null ? String(user.age) : "",
-        bloodGroup: user.bloodGroup ?? "",
-        allergies: user.allergies ?? "",
-        chronicDiseases: user.chronicDiseases ?? "",
-        emergencyContact: user.emergencyContact ?? "",
+      setInitialData(data.user);
+      setFeedback({
+        tone: "success",
+        message: "Profile updated successfully. Emergency QR code updated.",
       });
+    } catch {
+      setFeedback({
+        tone: "error",
+        message: "Network error saving profile.",
+      });
+    } finally {
+      setSaving(false);
     }
-
-    load();
-  }, []);
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setSaving(true);
-    setMessage("");
-    setError("");
-
-    const res = await fetch("/api/profile", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: form.name,
-        age: form.age ? Number(form.age) : undefined,
-        bloodGroup: form.bloodGroup || undefined,
-        allergies: form.allergies || undefined,
-        chronicDiseases: form.chronicDiseases || undefined,
-        emergencyContact: form.emergencyContact || undefined,
-      }),
-    });
-
-    const data = await res.json();
-    setSaving(false);
-
-    if (!res.ok || !data.success) {
-      setError("Failed to save profile.");
-      return;
-    }
-
-    setMessage("Profile saved. This info appears on your emergency QR view.");
-  }
-
-  if (loading) {
-    return (
-      <AppShell title="Profile">
-        <p className="text-white/70">Loading…</p>
-      </AppShell>
-    );
   }
 
   return (
-    <AppShell title="Profile & emergency info">
-      <p className="-mt-4 mb-6 text-white/65">
-        Fields marked for emergency sharing are visible when someone scans your QR code.
-      </p>
+    <AppShell
+      title="Health Profile & Emergency Information"
+      subtitle="Manage your personal identity, critical clinical indicators, and responder contacts."
+    >
+      <form onSubmit={handleSave} className="space-y-6 max-w-4xl">
+        {feedback && (
+          <Alert tone={feedback.tone}>
+            {feedback.message}
+          </Alert>
+        )}
 
-      <Card className="glass-panel-strong backdrop-blur-2xl border-white/10 bg-white/6 p-6 text-white shadow-none sm:p-8">
-        <form onSubmit={onSubmit} className="space-y-4">
-          <div>
-            <Label className="text-white/70">Email</Label>
-            <Input
-              value={email}
-              disabled
-              className="border-white/10 bg-white/5 text-white/70 placeholder:text-white/30 disabled:opacity-100"
-            />
-          </div>
-          <div>
-            <Label className="text-white/70">Full name</Label>
-            <Input
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              required
-              className="border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-teal-300/40 focus:ring-teal-400/20"
-            />
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <Label className="text-white/70">Age</Label>
-              <Input
-                type="number"
-                min={0}
-                value={form.age}
-                onChange={(e) => setForm({ ...form, age: e.target.value })}
-                className="border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-teal-300/40 focus:ring-teal-400/20"
-              />
+        {/* Section 1: Personal & Account Info */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <User size={18} className="text-slate-500" />
+                <CardTitle>Personal Information</CardTitle>
+              </div>
+              <Badge variant="outline" size="sm">
+                Identity
+              </Badge>
             </div>
-            <div>
-              <Label className="text-white/70">Blood group</Label>
-              <Input
-                placeholder="e.g. O+"
-                value={form.bloodGroup}
-                onChange={(e) => setForm({ ...form, bloodGroup: e.target.value })}
-                className="border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-teal-300/40 focus:ring-teal-400/20"
-              />
+            <CardDescription>
+              Your legal name and linked email address
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="full-name" required>
+                  Full Name
+                </Label>
+                <Input
+                  id="full-name"
+                  placeholder="e.g. Jane Doe"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="account-email">Email Address</Label>
+                <div className="relative">
+                  <Input
+                    id="account-email"
+                    value={email}
+                    disabled
+                    className="bg-slate-50 text-slate-500 cursor-not-allowed pr-8"
+                  />
+                  <Lock
+                    size={14}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+                </div>
+                <p className="mt-1 text-[11px] text-slate-400">
+                  Email is linked to your authentication credentials
+                </p>
+              </div>
             </div>
-          </div>
-          <div>
-            <Label className="text-white/70">Emergency contact</Label>
-            <Input
-              placeholder="Phone or name + phone"
-              value={form.emergencyContact}
-              onChange={(e) =>
-                setForm({ ...form, emergencyContact: e.target.value })
-              }
-              className="border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-teal-300/40 focus:ring-teal-400/20"
-            />
-          </div>
-          <div>
-            <Label className="text-white/70">Allergies</Label>
-            <Textarea
-              rows={2}
-              value={form.allergies}
-              onChange={(e) => setForm({ ...form, allergies: e.target.value })}
-              className="border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-teal-300/40 focus:ring-teal-400/20"
-            />
-          </div>
-          <div>
-            <Label className="text-white/70">Chronic conditions</Label>
-            <Textarea
-              rows={2}
-              value={form.chronicDiseases}
-              onChange={(e) =>
-                setForm({ ...form, chronicDiseases: e.target.value })
-              }
-              className="border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:border-teal-300/40 focus:ring-teal-400/20"
-            />
-          </div>
 
-          {error && (
-            <Alert className="border border-rose-400/20 bg-rose-400/10 text-rose-100">
-              {error}
-            </Alert>
-          )}
-          {message && (
-            <Alert tone="success" className="border border-emerald-400/20 bg-emerald-400/10 text-white">
-              {message}
-            </Alert>
-          )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="age">Age</Label>
+                <Input
+                  id="age"
+                  type="number"
+                  min={0}
+                  max={150}
+                  placeholder="e.g. 34"
+                  value={form.age}
+                  onChange={(e) => setForm({ ...form, age: e.target.value })}
+                />
+              </div>
 
+              <div>
+                <Label htmlFor="blood-group">Blood Group</Label>
+                <Input
+                  id="blood-group"
+                  placeholder="e.g. O+, A-, B+, AB+"
+                  value={form.bloodGroup}
+                  onChange={(e) =>
+                    setForm({ ...form, bloodGroup: e.target.value })
+                  }
+                />
+                <p className="mt-1 text-[11px] text-slate-400">
+                  Displayed prominently on emergency QR scan
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Section 2: Clinical & Medical Details */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Heart size={18} className="text-red-500" />
+                <CardTitle>Medical Conditions & Allergies</CardTitle>
+              </div>
+              <Badge variant="warning" size="sm">
+                Emergency Visible
+              </Badge>
+            </div>
+            <CardDescription>
+              Essential medical context shared with paramedics and physicians
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <Label htmlFor="allergies">Known Allergies</Label>
+              <Textarea
+                id="allergies"
+                rows={2}
+                placeholder="e.g. Penicillin, Peanuts, Latex, Aspirin (or 'None')"
+                value={form.allergies}
+                onChange={(e) => setForm({ ...form, allergies: e.target.value })}
+              />
+              <p className="mt-1 text-[11px] text-slate-400">
+                List any severe pharmaceutical or environmental allergies
+              </p>
+            </div>
+
+            <div>
+              <Label htmlFor="chronic-conditions">
+                Chronic Diseases & Conditions
+              </Label>
+              <Textarea
+                id="chronic-conditions"
+                rows={2}
+                placeholder="e.g. Asthma, Type 2 Diabetes, Hypertension (or 'None')"
+                value={form.chronicDiseases}
+                onChange={(e) =>
+                  setForm({ ...form, chronicDiseases: e.target.value })
+                }
+              />
+              <p className="mt-1 text-[11px] text-slate-400">
+                Important underlying conditions that clinicians should be aware of
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Section 3: Emergency Contacts */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Phone size={18} className="text-slate-700" />
+                <CardTitle>Emergency Responder Contact</CardTitle>
+              </div>
+              <Badge variant="success" size="sm">
+                1-Tap Call Link
+              </Badge>
+            </div>
+            <CardDescription>
+              Primary contact person and phone number for immediate notification
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div>
+              <Label htmlFor="emergency-contact">
+                Emergency Contact (Name, Relation & Phone)
+              </Label>
+              <Input
+                id="emergency-contact"
+                placeholder="e.g. Sarah Jenkins (Spouse) — +1 (555) 019-2834"
+                value={form.emergencyContact}
+                onChange={(e) =>
+                  setForm({ ...form, emergencyContact: e.target.value })
+                }
+              />
+              <p className="mt-1.5 text-xs text-slate-500">
+                Include country/area code so first responders can tap-to-call immediately.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Save Bar */}
+        <div className="flex items-center justify-end gap-3 pt-2">
           <Button
-            type="submit"
+            variant="outline"
+            type="button"
+            onClick={handleReset}
             disabled={saving}
-            className="rounded-xl bg-linear-to-r from-teal-400 to-cyan-500 px-5 py-3 font-semibold text-slate-950 shadow-lg shadow-teal-500/20 hover:from-teal-300 hover:to-cyan-400"
           >
-            {saving ? "Saving…" : "Save profile"}
+            Cancel
           </Button>
-        </form>
-      </Card>
+          <Button variant="primary" type="submit" loading={saving}>
+            Save Changes
+          </Button>
+        </div>
+      </form>
     </AppShell>
   );
 }

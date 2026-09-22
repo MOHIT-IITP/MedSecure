@@ -58,6 +58,12 @@ export async function POST(
       password: hashedPassword,
     }).returning();
 
+    if (!newUser) {
+      return NextResponse.json(
+        { success: false, message: "User creation failed" },
+        { status: 500 }
+      );
+    }
 
     const token = generateJWT({
       id: newUser.id,
@@ -90,13 +96,23 @@ export async function POST(
     );
 
     return response;
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+    console.error("Signup error:", error);
+    const isDbError =
+      !process.env.DATABASE_URL ||
+      error?.code === "ECONNREFUSED" ||
+      error?.message?.toLowerCase().includes("database") ||
+      error?.message?.toLowerCase().includes("connect") ||
+      error?.message?.toLowerCase().includes("relation");
+
     return NextResponse.json(
       {
         success: false,
-        message: "Internal Server Error",
-      },{
+        message: isDbError
+          ? "Database connection failed. Please ensure DATABASE_URL is configured in your .env file and PostgreSQL is running."
+          : error?.message || "Internal Server Error",
+      },
+      {
         status: 500,
       }
     );

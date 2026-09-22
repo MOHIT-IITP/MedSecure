@@ -1,5 +1,6 @@
+import React from "react";
 import Link from "next/link";
-import { CiHospital1 } from "react-icons/ci";
+import { Shield } from "./ui/icons";
 
 export function AuthPageShell({
   title,
@@ -17,103 +18,45 @@ export function AuthPageShell({
   footerLinkLabel: string;
 }) {
   return (
-    <div className="auth-page relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-12">
-      <div className="page-grid pointer-events-none absolute inset-0" aria-hidden />
-      <div
-        className="pointer-events-none absolute -left-20 top-1/4 h-64 w-64 rounded-full bg-teal-400/20 blur-3xl"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute -right-16 bottom-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-3xl"
-        aria-hidden
-      />
-
-      <div className="relative z-10 w-full max-w-md">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      {/* Top Logo */}
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <Link
           href="/"
-          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-white/60 transition hover:text-white"
+          className="inline-flex items-center gap-2.5 group focus:outline-none"
         >
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-xs font-bold text-teal-200 ring-1 ring-white/20">
-            <CiHospital1 className="h-4 w-4" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-white shadow-xs group-hover:bg-slate-800 transition">
+            <Shield size={20} />
+          </div>
+          <span className="text-xl font-bold tracking-tight text-slate-900">
+            MedSecure
           </span>
-          MedSecure
         </Link>
+        <h2 className="mt-6 text-2xl font-bold tracking-tight text-slate-900">
+          {title}
+        </h2>
+        <p className="mt-1.5 text-xs text-slate-500 max-w-sm mx-auto">
+          {description}
+        </p>
+      </div>
 
-        <div className="auth-form-card p-8 sm:p-10">
-          <h1 className="text-xl font-semibold tracking-tight text-white">{title}</h1>
-          <p className="mt-2 text-sm leading-relaxed text-white/60">{description}</p>
+      {/* Form Card Container */}
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4 sm:px-0">
+        <div className="bg-white py-8 px-6 shadow-xs border border-slate-200/90 rounded-2xl sm:px-10">
           {children}
         </div>
 
-        <p className="mt-6 text-center text-sm text-white/55">
+        {/* Footer Link */}
+        <p className="mt-6 text-center text-xs text-slate-500">
           {footerText}{" "}
           <Link
             href={footerHref}
-            className="font-medium text-teal-300 transition hover:text-teal-200"
+            className="font-semibold text-slate-900 hover:text-blue-600 transition underline underline-offset-2"
           >
             {footerLinkLabel}
           </Link>
         </p>
       </div>
     </div>
-  );
-}
-
-export function AuthLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <label className="mb-1.5 block text-sm font-medium text-white/75">{children}</label>
-  );
-}
-
-export function AuthInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
-  return (
-    <input
-      {...props}
-      className={`w-full border border-white/15 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/35 outline-none transition focus:border-teal-400/50 focus:bg-white/15 focus:ring-2 focus:ring-teal-400/25 ${props.className ?? ""}`}
-      style={{
-        borderRadius: "var(--auth-radius-sm)",
-        ...props.style,
-      }}
-    />
-  );
-}
-
-export function AuthButton({
-  children,
-  ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      type="submit"
-      {...props}
-      className={`w-full bg-gradient-to-r from-teal-400/90 to-cyan-500/90 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-teal-900/20 transition hover:brightness-110 disabled:opacity-50 ${props.className ?? ""}`}
-      style={{
-        borderRadius: "var(--auth-radius-sm)",
-        ...props.style,
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
-export function AuthAlert({
-  children,
-  tone = "error",
-}: {
-  children: React.ReactNode;
-  tone?: "error" | "success";
-}) {
-  return (
-    <p
-      className={`px-4 py-2.5 text-sm ${
-        tone === "success"
-          ? "bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-400/25"
-          : "bg-red-500/15 text-red-200 ring-1 ring-red-400/25"
-      }`}
-      style={{ borderRadius: "var(--auth-radius-sm)" }}
-    >
-      {children}
-    </p>
   );
 }

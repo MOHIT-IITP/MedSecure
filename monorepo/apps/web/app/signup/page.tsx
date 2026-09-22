@@ -1,14 +1,9 @@
 "use client";
 
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import {
-  AuthAlert,
-  AuthButton,
-  AuthInput,
-  AuthLabel,
-  AuthPageShell,
-} from "../../components/auth-page-shell";
+import { AuthPageShell } from "../../components/auth-page-shell";
+import { Button, Input, Label, Alert } from "../../components/ui";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -23,36 +18,50 @@ export default function SignupPage() {
     setError("");
     setLoading(true);
 
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
-    });
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), password }),
+      });
 
-    const data = await res.json();
-    setLoading(false);
+      const data = await res.json();
 
-    if (!res.ok || !data.success) {
-      setError(data.message ?? "Signup failed. Check your details.");
-      return;
+      if (!res.ok || !data.success) {
+        const fieldErrors = data.error?.fieldErrors;
+        if (fieldErrors) {
+          const firstMsg = Object.values(fieldErrors).flat().filter(Boolean)[0];
+          setError(typeof firstMsg === "string" ? firstMsg : (data.message ?? "Validation failed."));
+        } else {
+          setError(data.message ?? "Registration failed. Check your details.");
+        }
+        return;
+      }
+
+      router.push("/dashboard");
+      router.refresh();
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    router.push("/dashboard");
-    router.refresh();
   }
 
   return (
     <AuthPageShell
-      title="Create account"
-      description="Start managing your health records securely."
+      title="Create an account"
+      description="Start managing your digital health profile and emergency records securely."
       footerText="Already have an account?"
       footerHref="/login"
-      footerLinkLabel="Log in"
+      footerLinkLabel="Sign in"
     >
-      <form onSubmit={onSubmit} className="mt-8 space-y-5">
+      <form onSubmit={onSubmit} className="space-y-4">
         <div>
-          <AuthLabel>Full name</AuthLabel>
-          <AuthInput
+          <Label htmlFor="signup-name" required>
+            Full Name
+          </Label>
+          <Input
+            id="signup-name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
@@ -61,9 +70,13 @@ export default function SignupPage() {
             placeholder="Jane Doe"
           />
         </div>
+
         <div>
-          <AuthLabel>Email</AuthLabel>
-          <AuthInput
+          <Label htmlFor="signup-email" required>
+            Email Address
+          </Label>
+          <Input
+            id="signup-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -72,9 +85,13 @@ export default function SignupPage() {
             placeholder="you@example.com"
           />
         </div>
+
         <div>
-          <AuthLabel>Password</AuthLabel>
-          <AuthInput
+          <Label htmlFor="signup-password" required>
+            Password
+          </Label>
+          <Input
+            id="signup-password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -82,14 +99,22 @@ export default function SignupPage() {
             minLength={8}
             autoComplete="new-password"
             placeholder="At least 8 characters"
+            helperText="Must be 8 or more characters"
           />
         </div>
 
-        {error && <AuthAlert>{error}</AuthAlert>}
+        {error && <Alert tone="error">{error}</Alert>}
 
-        <AuthButton type="submit" disabled={loading}>
-          {loading ? "Creating account…" : "Sign up"}
-        </AuthButton>
+        <div className="pt-2">
+          <Button
+            type="submit"
+            variant="primary"
+            loading={loading}
+            className="w-full h-10"
+          >
+            Create Account
+          </Button>
+        </div>
       </form>
     </AuthPageShell>
   );

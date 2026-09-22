@@ -1,14 +1,9 @@
 "use client";
 
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import {
-  AuthAlert,
-  AuthButton,
-  AuthInput,
-  AuthLabel,
-  AuthPageShell,
-} from "../../components/auth-page-shell";
+import { AuthPageShell } from "../../components/auth-page-shell";
+import { Button, Input, Label, Alert } from "../../components/ui";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -22,36 +17,50 @@ export default function LoginPage() {
     setError("");
     setLoading(true);
 
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), password }),
+      });
 
-    const data = await res.json();
-    setLoading(false);
+      const data = await res.json();
 
-    if (!res.ok || !data.success) {
-      setError(data.message ?? "Invalid email or password.");
-      return;
+      if (!res.ok || !data.success) {
+        const fieldErrors = data.error?.fieldErrors;
+        if (fieldErrors) {
+          const firstMsg = Object.values(fieldErrors).flat().filter(Boolean)[0];
+          setError(typeof firstMsg === "string" ? firstMsg : (data.message ?? "Invalid email or password."));
+        } else {
+          setError(data.message ?? "Invalid email or password.");
+        }
+        return;
+      }
+
+      router.push("/dashboard");
+      router.refresh();
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    router.push("/dashboard");
-    router.refresh();
   }
 
   return (
     <AuthPageShell
       title="Welcome back"
-      description="Log in to your MedSecure account."
-      footerText="New here?"
+      description="Enter your credentials to access your health records."
+      footerText="Don't have an account?"
       footerHref="/signup"
       footerLinkLabel="Create an account"
     >
-      <form onSubmit={onSubmit} className="mt-8 space-y-5">
+      <form onSubmit={onSubmit} className="space-y-4">
         <div>
-          <AuthLabel>Email</AuthLabel>
-          <AuthInput
+          <Label htmlFor="login-email" required>
+            Email Address
+          </Label>
+          <Input
+            id="login-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -60,9 +69,15 @@ export default function LoginPage() {
             placeholder="you@example.com"
           />
         </div>
+
         <div>
-          <AuthLabel>Password</AuthLabel>
-          <AuthInput
+          <div className="flex items-center justify-between mb-1.5">
+            <Label htmlFor="login-password" required className="mb-0">
+              Password
+            </Label>
+          </div>
+          <Input
+            id="login-password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -72,11 +87,18 @@ export default function LoginPage() {
           />
         </div>
 
-        {error && <AuthAlert>{error}</AuthAlert>}
+        {error && <Alert tone="error">{error}</Alert>}
 
-        <AuthButton type="submit" disabled={loading}>
-          {loading ? "Signing in…" : "Log in"}
-        </AuthButton>
+        <div className="pt-2">
+          <Button
+            type="submit"
+            variant="primary"
+            loading={loading}
+            className="w-full h-10"
+          >
+            Sign In
+          </Button>
+        </div>
       </form>
     </AuthPageShell>
   );
