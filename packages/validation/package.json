@@ -1,0 +1,31 @@
+{
+  "name": "@medsecure/validation",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@medsecure/types": "*",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@medsecure/eslint-config": "*",
+    "@medsecure/typescript-config": "*",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
+    "eslint": "^9.21.0",
+    "typescript": "^5.8.2"
+  }
+}

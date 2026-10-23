@@ -1,0 +1,10 @@
+{
+  "extends": "@medsecure/typescript-config/node.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noEmit": true,
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["src/**/*", "tests/**/*"]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@medsecure/eslint-config",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "node.js"
+  ],
+  "peerDependencies": {
+    "eslint": ">=8.0.0"
+  }
+}
